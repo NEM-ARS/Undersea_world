@@ -52,7 +52,7 @@ function createFish(item){
 //запускаем стартовое количество рыб
 for(let i=0; i<=4; i++){
     listFish.forEach(item => {
-        // createFish(item)
+        createFish(item)
     })
 }
 
