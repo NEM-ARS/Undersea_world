@@ -1,0 +1,16 @@
+{
+    "html.hover.references": false,
+    "css.hover.references": false,
+    "less.hover.references": false,
+    "scss.hover.references": false,
+    "editor.inlayHints.enabled": "on",
+    "editor.parameterHints.enabled": true,
+    "editor.parameterHints.cycle": true,
+    "workbench.tips.enabled": true,
+    "html.hover.documentation": false,
+    "editor.hover.above": true,
+    "css.hover.documentation": false,
+    "less.hover.documentation": false,
+    "scss.hover.documentation": false,
+    "accessibility.verbosity.hover": false
+}
