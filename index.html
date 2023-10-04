@@ -3,26 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Океан</title>
-    <link rel="shortcut icon" href="#">
+    <link rel="shortcut icon" href="foto/fish1.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="ocean">
-
+    <div id="ocean" class="ocean">
         <img class="sound btn" src="foto/icons/volume_off.svg" alt="sound">
         <div class="quantity">
+            <div  class="list-fish btn">список
+                <div id="list-box" class="list-box">
+                    <div class="list-elem">
+                        <div class="list-item nameFish" ></div>
+                        <div class="list-item img-fish"></div>
+                    </div>
+                </div>
+            </div>
             <div class="create btn">создать</div>
-            <div class="plus btn">добавить</div>
-            <div class="minus btn">удалить</div>
+            <div class="plus btn">больше</div>
+            <div class="minus btn">меньше</div>
         </div>
 
         <div class="create-fish">
-            <form action="#" name="modalBox" method="post" class="modalBox " autocomplete="off" >
-                    <input type="button" class="form-btn btn-top" value="не сейчас" >
-                    <input type="text" name="fishName" class="inp" placeholder="имя рыбки" autocomplete="off">
+            <form id="form" accept="#" name="modalBox" class="modalBox " autocomplete="off" >
+                    <input type="reset" class="form-btn btn-top" value="не сейчас" >
+                    <input type="text" name="fishName" class="inp" placeholder="имя рыбки" autocomplete="off" required>
 
                     <div class="file-box">
-                        <input type="text" name="urlFish" class="inp" placeholder="url картинки" >
+                        <input type="text" name="urlFish" class="inp" placeholder="url картинки" required>
+                        <div class="error"></div>
                         <label for="link1" class="input-file" title="загрузить файл">
                             <input id="link1" name="file" type="file" accept="image/svg,image/png,image/jpeg" hidden >
 
@@ -30,26 +38,30 @@
                         
                     </div>
                     
-                    <input type="text" class="inp" placeholder="ссылка на источник">
+                    <input type="text" class="inp" name="inpLink" placeholder="ссылка с описанием">
                     
                     <div class="fish-box">
-                        <p class="arrow">направление 
+                        <p id="arrow">направление 
                         <span >></span>
                         <span >></span>
                         <span >></span>
                     </p>
                         <div  class="fish-rotate">
-                            <img id="formImg" src="foto/carp.png">
-                            <label for="radio-l" class="pointer pointer-left " ></label>
-                            <label for="radio-r" class="pointer pointer-right "></label>
+                            <img id="formImg" src="foto/fish1.png">
+                            <div class="pointer pointer-left "></div>
+                            <div class="pointer pointer-right"></div>
                         </div>
-
-                            <input id="radio-l" type="radio" name="radio" value="radio-l" hidden>
-                            <input id="radio-r" type="radio" name="radio" value="radio-r" hidden>
+                        <a class="file-link" target='blank' href="https://www.remove.bg/ru">убрать фон можно по ссылке</a>
                     </div>
 
-                    <input type="reset" name="send" value="готово" class="form-btn btn-bottom">
+                    <input type="submit" name="send" value="готово" class="form-btn btn-bottom">
             </form>
+        </div>
+        <img src="foto/icons/volume_off.svg" class="sound1" alt="fish">
+        <div class="gold">
+            <p>я золотая рыбка! у тебя есть три желания!</p>
+            <img src="foto/gold.png" alt="">
+            <p>потрать их с умом</p>
         </div>
     </div>
     <script src="script.js"></script>

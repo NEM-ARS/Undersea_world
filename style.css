@@ -10,75 +10,73 @@
     position: relative;
     width: 100vw;
     height: 100vh;
-    cursor: url('foto/icons/sniper.png')24 24 ,none;
     text-transform: uppercase;
     font-family: cursive;
     color: #fff;
-
-
 }
 .fish{
     position: absolute;
-    transition: top 6s linear, left 6s linear; 
+    transition: top 8s linear, left 8s linear; 
     left: -1000px;
+    filter: brightness(0.7);
 }
+
+.akula,.sound1{
+    position: absolute;
+    transition: top 8s linear, left 8s linear; 
+}
+
+.sound1{
+    width: 150px;
+    left: -500px;
+    top: 50vh;
+}
+
+.gold{
+    text-align: center;
+}
+
 .quantity{
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 50%;
     transform: translate(-50%);
     display: flex;
     justify-content: space-between;
-    z-index: 1;
+    height: 30px;
 }
 
 
 .btn{
-    position: absolute;
     z-index: 1;
     font-weight: 900;
     padding: 3px 8px;
     text-align: center;
-    margin: 0 5px;
+    margin: 0 8px;
     opacity: 0.5;
     background: #4d69bb61;
     transition: background 0.3s linear, transform 0.3s linear;
     cursor: pointer;
-    border-radius: 20px;
-}
-
-.quantity>div{
-    position: initial;
-    height: 30px;
-
+    border-radius: 0 0 20px 20px;
 }
 
 .btn:hover{
     opacity: 1;
     background-color: #4d68bb;
+    transform: translate(0px,5px) scale(1.3);
 }
 
 .sound{
+    position: relative;
     width: 30px;
-    top: 10px;
+    top: 0;
     left:10px;
     padding: 0;
     margin: 0;
 }
-.minus:hover,.sound:hover{
-    transform: translate(10px,5px) scale(1.3);
-}
-
-.plus:hover{
-    transform: translate(0px,5px) scale(1.3);
-}
-
-.create:hover{
-    transform: translate(-10px,5px) scale(1.3);
-} 
-
 
 .notification{ 
+    position: absolute;
     cursor: auto;
     padding: 5px;
     top: -100px;
@@ -86,7 +84,14 @@
     transition: all 0.3s;
     text-align: center;
     cursor: default;
+    border-radius: 20px;
 }
+
+
+.notification:hover{
+    transform: translate(0);
+}
+
 .notification>a{
     text-decoration: none;
     color: #fff;
@@ -106,11 +111,6 @@
 
 .notification>p{
     margin: 3px;
-}
-
-.notification:hover{
-    background-color: #4d68bb;
-    opacity: 1;
 }
 
 .shot{
@@ -134,26 +134,30 @@
     }
 }
 
-/*/////////////////////////////////////////////////////*/
-
-.create-fish{
+.create-fish, .gold{
     position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     display: grid;
-    /* justify-content: center; */
+    justify-content: center;
     align-content: center;
-    height: 100vh;
-    width: 100vw;
     background-color:#001424c7;
     backdrop-filter: blur(5px) ;
     cursor: auto;
     z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s linear , visibility .6s linear;
 }
 .modalBox{
     max-width: 300px;
     padding: 5px 10px;
     background-color: #7bc5da86;
     border-radius: 20px;  
-    text-align: center;  
+    text-align: center; 
+     
 }
 
 .form-btn{
@@ -213,7 +217,7 @@
     margin: 5px 0;
     border-radius: 10px 0 0 10px;
     background: #7bc5da url(foto/icons/upload_file.png) center no-repeat;
-    transition: all .2s;
+    transition: width .2s linear;
     cursor: pointer;
 
 }
@@ -228,10 +232,11 @@
     padding: 10px;
     height: 75px;
     margin: 0;
-    transition: all .3s linear;
+    transition: background .3s linear;
 }
 .fish-rotate>img{
     height: 50px;
+    max-width: 180px;
 }
 
 .pointer{
@@ -240,7 +245,8 @@
     top: 0;
     width: 50%;
     height: 100%;
-    transition: all .3s;
+    box-shadow: none;
+    transition: box-shadow .3s;
     cursor: pointer;
 }
 
@@ -259,6 +265,7 @@
 .pointer-right:hover{
     box-shadow: -100px 0px 70px -100px #cdf1ffab inset;
 }
+
 .pointer-right::after, .pointer-left:before{
     content: '';
     display: block;
@@ -281,17 +288,148 @@
     opacity: 0;
     position: relative;
     z-index: -1;
-    height: 100px;
-    transition: all .3s linear , opacity .2s linear;
+    height: 120px;
+    transition: margin .3s linear .3s , opacity .2s linear .5s;
 }
 .fish-box-on{
     z-index: 1;
     opacity: 1;
     margin: 0;
-    transition: all .3s linear , opacity .3s linear .3s;
 }
 
-.arrowOff{
+.arrow>:last-child{
+    animation: arrow .8s linear .4s infinite;
+
+}
+.arrow>:nth-child(2){
+    animation: arrow .8s linear .3s infinite;
+
+}
+.arrow>:first-child{
+    animation: arrow .8s linear .2s infinite;
+
+}
+
+@keyframes arrow{
+    0%{
+     opacity: 1;   
+    }
+    100%{
     opacity: 0;
+    }
 }
 
+.error{
+    position: absolute;
+    font-size: 9px;
+    display: block;
+    bottom: 5px;
+    color: red;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    border-radius: 0 0 6px 0;
+    padding: 2px 4px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.file-link{
+    font-size: 10px;
+    display: block;
+    color: #7bc5da;
+    text-decoration: none;
+    transition: box-shadow .2s linear;
+    box-shadow: none;
+    padding: 5px;
+    margin: 2px 0;
+}
+
+.file-link:hover{
+    box-shadow: 0px 0px 62px 100px #cdf1ff1f inset;
+    color: #fff;
+}
+
+.rotateImg{
+    transform: scale(-1,1);
+}
+
+.list-fish{
+    position: relative;
+}
+
+.list-fish:hover{
+   transform: scale(1);
+}
+
+.list-box{
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 1;
+    padding: 8px 8px;
+    text-align: center;
+    margin: 0 5px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #4d68bbcf, #00000087);
+    width: 216px;
+    right: -5px;
+    max-height: 90vh;
+    border-top: 10px solid #4d68bb;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s linear;
+}
+
+.list-box::-webkit-scrollbar {
+    display: none;
+}
+
+.list-box {
+-ms-overflow-style: none; 
+scrollbar-width: none; 
+}
+
+.list-elem{
+    position: relative;
+    width: 400px;
+    display: flex;
+    transform: translate(-200px, 0);
+    transition: transform .3s linear .3s;
+}
+
+.list-item{
+    width: 200px;
+    padding: 0 10px;
+}
+
+.list-elem:hover{
+    transform: translate(0px, 0);
+}
+
+.list-item img{
+    height: 30px;
+}
+.nameFish>p{
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+}
+.nameFish>p:hover{
+    height: auto;
+}
+
+.del{
+    background: url(foto/icons/delete.png) 50% 50% no-repeat;
+    float: left;
+    padding: 3px;
+    margin: 0 3px 0 -10px;
+}
+
+.del:hover{
+    border-radius: 20px;
+    background-color: #4d68bb;
+}
+
+.show{
+    visibility: visible;
+    opacity: 1;
+}
