@@ -9,8 +9,20 @@ document.body.ondragstart = function() {
 /////////////////////////////////////
 
 const ocean = document.querySelector('#ocean');
-ocean.onmousemove = ()=>{
-    ocean.style.cursor = `url('foto/icons/sniper.png')24 24 ,none`;
+ocean.onmousemove = (e)=>{
+    ocean.style.cursor = `url('foto/icons/sniper.png')24 24,none`;
+    if(e.clientY<24){
+        ocean.style.cursor = `url('foto/icons/sniper.png')24 ${e.clientY} ,none`;
+    }
+    if(e.clientY > ocean.clientHeight - 24 ){
+        ocean.style.cursor = `url('foto/icons/sniper.png')24 ${48-(ocean.clientHeight-e.clientY)} ,none`;
+    }
+    if(e.clientX < 24){
+        ocean.style.cursor = `url('foto/icons/sniper.png') ${e.clientX} 24 ,none`;
+    }
+    if(e.clientX > ocean.clientWidth - 26){
+        ocean.style.cursor = `url('foto/icons/sniper.png') ${50-(ocean.clientWidth-e.clientX)} 24,none`;
+    }
 }
 
 let oceanAudio = new Audio("audio/ocean.mp3");
@@ -89,8 +101,6 @@ function randomСoordinates({elem,left,top,rotate= 'scale(1)'}) {
         randomTop = top;
         elem.addEventListener("transitionend", ()=>elem.remove(), false);
     }
-
-
         let x = randomLeft - (elem.offsetLeft + elem.clientWidth / 2);
         let y = randomTop - (elem.offsetTop + elem.clientHeight / 2);
         
@@ -122,6 +132,7 @@ let click = 0;
 let shot = document.createElement('div');
 ocean.prepend(shot)
 
+
 //отслеживаем клики мыши
 ocean.addEventListener('mousedown', function(event){
     
@@ -130,15 +141,25 @@ ocean.addEventListener('mousedown', function(event){
     if(targetClass.contains('fish')){
         if(check)fire.play();
         kill(event.target);
+        createNotification(null,event.target);
     }else if(targetClass.contains('sound')){
         soundOn();
     }else if(targetClass.contains('list-fish')){
         document.querySelector('.list-box').classList.toggle('show');
+        
     }else if(targetClass.contains('plus')){
+        if(document.querySelectorAll('.active').length > 100){
+            createNotification('тесно! больше не добавляем!');
+            return;
+        }
         addFish();
         click = 0;
     }else if(targetClass.contains('minus')){
         dellFish();
+        if(document.querySelectorAll('.active').length<1){
+            minus.hidden = true;
+           setTimeout(()=>createNotification('стало совсем пусто'),2000) 
+        }
     }else if(targetClass.contains('create')){
         arrow.classList.add('arrow')
         document.querySelector('.create-fish').classList.add('show');
@@ -147,30 +168,46 @@ ocean.addEventListener('mousedown', function(event){
     }
     if(targetClass.contains('ocean') || targetClass.contains('fish')){
         document.querySelector('.list-box').classList.remove('show')
-        
-        if(check)fire.play();
-        shot.classList.add('shot');
-        shot.style.left = event.clientX - 10 + 'px';
-        shot.style.top =event.clientY - 10 + 'px';
+        createShot(event)
     }
     
     
 }, false);
 
 ocean.addEventListener('mouseup', ()=>{
-    if(document.querySelectorAll('.active').length<1){
-        minus.hidden = true;
-        document.querySelector('.list-box').classList.remove('show');
-    }
-
+    
     shot.classList.remove('shot');
 }, false);
+
+function createShot(e){
+    if(check)fire.play();
+    shot.classList.add('shot');
+
+    shot.style.left = e.clientX - 10 + 'px';
+    shot.style.top =e.clientY - 10 + 'px';
+
+    if(e.clientY<24){
+        shot.style.left = e.clientX - 10 + 'px';
+        shot.style.top = 14+ 'px';
+    }
+    if(e.clientY > ocean.clientHeight - 24 ){
+        shot.style.left = e.clientX - 10 + 'px';
+        shot.style.top = ocean.clientHeight -34 + 'px';
+    }
+    if(e.clientX < 24){
+        shot.style.left = 14 + 'px';
+        shot.style.top = e.clientY - 10 + 'px';
+    }
+    if(e.clientX > ocean.clientWidth - 24){
+        shot.style.left = ocean.clientWidth - 34 + 'px';
+        shot.style.top =e.clientY - 10 + 'px';
+    }
+}
 
 //удаляем рыб по одной
 function kill(target){
     let rotate = target.style.transform;
     
-    createNotification(target);
     target.classList.remove('active');
     randomСoordinates({elem: target, left:target.offsetLeft, top: -300});
     target.style.pointerEvents = 'none';
@@ -222,6 +259,7 @@ function createList(name,path){
 
 //удаление рыб из списка
 document.querySelector('.list-box').onclick = (e)=>{
+        
     if(e.target.classList.contains('del')){
     let name = e.target.nextElementSibling.textContent;
 
@@ -241,7 +279,7 @@ form.fishName.onblur = ()=>{
     let checkName = listFish.find(item => item.name == form.fishName.value.toLowerCase().split(' ').join(''))
     if(checkName){
         form.fishName.value = prompt(`К СОЖАЛЕНИЮ "${form.fishName.value.toUpperCase()}" УЖЕ ИМЕЕТСЯ. Можно назвать `,
-        `${form.fishName.value} с пивом`) || '';
+        `${form.fishName.value} к пиву`) || '';
     }
 };
 
@@ -319,8 +357,7 @@ const minus = document.querySelector('.minus');
 //добавляем рыб
 function addFish(){
     click = 0;
-    let k = document.querySelectorAll('.list-box p')
-for(let i of k){
+for(let i of document.querySelectorAll('.list-box p')){
 
     listFish.find((item) =>{
         if(item.name == i.innerHTML){
@@ -332,10 +369,21 @@ for(let i of k){
         minus.hidden = false;
 }
 
+let gold = document.querySelector('.sound1');
 
 //удаляем кол-во рыб 
 function dellFish(){
-    if(++click == 5) akula();
+    ++click;
+    if(click == 5){
+        akula();
+        
+    }else if(click == 25){
+        gold.src = "foto/золотая.png";
+        let left = randomInteger(ocean.clientWidth, ocean.clientWidth*2);
+        let top = randomInteger(0,ocean.clientHeight);
+        randomСoordinates({elem: gold, left: left, top: top });
+
+    }
         
     for(let i=0; i<=3; i++) {
         let kill = document.querySelector('.active');
@@ -345,48 +393,56 @@ function dellFish(){
     }
 }
 
+gold.onclick = (e)=>{
+    kill(e.target);
+    document.querySelector('.gold').classList.add('show');
+    setTimeout(()=>document.querySelector('.gold').classList.remove('show'),5000);
+}
+
 function akula(){
-    let akula = document.createElement('img')
+    let akula = document.createElement('img');
     akula.classList.add('akula');
     akula.src = "foto/Акула.png";
     akula.style.zIndex = 1;
     akula.style.width = 600 + 'px';
     akula.style.left = ocean.clientWidth + akula.clientWidth + 'px';
     akula.style.top = randomInteger(-100, ocean.clientHeight) + 'px';
-    ocean.append(akula)
+    ocean.append(akula);
     randomСoordinates({elem:akula, left: -1000, top: randomInteger(-100, ocean.clientHeight), rotate: "scale(-1,1)"});
 }
 
 //уведомления
-function createNotification(target){
+function createNotification(text, target){
     for (let elem of document.getElementsByClassName('notification')) elem.remove();
-
-
     let notification = document.createElement('div');
-    let params = listFish.find(item => item.name == target.getAttribute('name')) ;
-
     notification.className = 'notification btn';
     notification.id = 'notification';
     ocean.prepend(notification);
-
-    notification.insertAdjacentHTML('afterbegin', `<img src='${params.path}' alt='fish' style='width:100px; transform:${params.pointer};'>`)
-    notification.insertAdjacentHTML('beforeend', `<p>${params.name}</p>`)
-    
     notification.style.top =notification.getBoundingClientRect().top + 115 + 'px';
-    
     let timer = setTimeout(()=>notification.remove(),2000);
-
-    notification.onmouseenter = ()=>{
-        clearTimeout(timer);
-        if(params.link){
-            notification.insertAdjacentHTML('beforeend', `<a href='${params.link}' target='_blank'>Узнать больше</a>`);
-        }else{
-            notification.insertAdjacentHTML('beforeend', `<a href='#'>нет информации</a>`);
+    if(text){
+        notification.insertAdjacentHTML('beforeend', `<p>${text}</p>`)
+        notification.onmouseenter = ()=>clearTimeout(timer);
+        notification.onmouseleave = ()=>{
+        timer = setTimeout(()=>notification.remove(),2000);
         }
-   } 
+    }else{
+        let params = listFish.find(item => item.name == target.getAttribute('name')) ;
+        notification.insertAdjacentHTML('afterbegin', `<img src='${params.path}' alt='fish' style='width:100px; transform:${params.pointer};'>`)
+        notification.insertAdjacentHTML('beforeend', `<p>${params.name}</p>`)
 
-   notification.onmouseleave = ()=>{
-       timer = setTimeout(()=>notification.remove(),1500);
-       notification.lastChild.remove()
-   }
+        notification.onmouseenter = ()=>{
+            clearTimeout(timer);
+            if(params.link){
+                notification.insertAdjacentHTML('beforeend', `<a href='${params.link}' target='_blank'>Узнать больше</a>`);
+            }else{
+                notification.insertAdjacentHTML('beforeend', `<a href='#'>нет информации</a>`);
+            }
+        } 
+
+        notification.onmouseleave = ()=>{
+            timer = setTimeout(()=>notification.remove(),1500);
+            notification.lastChild.remove()
+        }
+    }
 }
