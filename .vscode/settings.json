@@ -12,5 +12,6 @@
     "css.hover.documentation": false,
     "less.hover.documentation": false,
     "scss.hover.documentation": false,
-    "accessibility.verbosity.hover": false
+    "accessibility.verbosity.hover": false,
+    "liveServer.settings.port": 5501
 }

@@ -64,8 +64,7 @@ function createFish(item){
     img.style.height = randomInteger(40,90) + 'px';
 
     ocean.prepend(img);
-    
-    randomСoordinates({elem:img, rotate: item.pointer});
+    img.addEventListener('load', ()=>randomСoordinates({elem:img, rotate: item.pointer}))
 
     setTimeout(function run() {
         randomСoordinates({elem:img, rotate: item.pointer});
@@ -73,6 +72,10 @@ function createFish(item){
       }, randomInteger(2000, 7000));
 
 }
+
+const bg = new Image();
+bg.src = "foto/ocean.gif"
+bg.onload = ()=>document.querySelector('.ocean_bg').src = bg.src;
 
 //запускаем стартовое количество рыб
 for(let i=0; i<=4; i++){
@@ -139,7 +142,7 @@ ocean.addEventListener('mousedown', function(event){
     let  targetClass = event.target.classList;
     
     if(targetClass.contains('fish')){
-        if(check)fire.play();
+        lastFish();
         kill(event.target);
         createNotification(null,event.target);
     }else if(targetClass.contains('sound')){
@@ -156,23 +159,30 @@ ocean.addEventListener('mousedown', function(event){
         click = 0;
     }else if(targetClass.contains('minus')){
         dellFish();
-        if(document.querySelectorAll('.active').length<1){
-            minus.hidden = true;
-           setTimeout(()=>createNotification('стало совсем пусто'),2000) 
-        }
+        lastFish();
     }else if(targetClass.contains('create')){
         arrow.classList.add('arrow')
         document.querySelector('.create-fish').classList.add('show');
         document.querySelector('.fish-box').classList.toggle('fish-box-on');
         window.onblur = ()=> {return false};
     }
-    if(targetClass.contains('ocean') || targetClass.contains('fish')){
-        document.querySelector('.list-box').classList.remove('show')
-        createShot(event)
+    if(targetClass.contains('ocean_bg') || targetClass.contains('fish')){
+        document.querySelector('.list-box').classList.remove('show');
+        createShot(event);
     }
     
     
 }, false);
+
+function lastFish(){
+    if(document.querySelectorAll('.active').length>1) return 
+       minus.hidden = true;
+       setTimeout(function(){
+        if(document.querySelectorAll('.active').length<1){
+            createNotification('стало совсем скучно') }
+        },2000)
+    
+}
 
 ocean.addEventListener('mouseup', ()=>{
     
@@ -337,7 +347,8 @@ form.addEventListener('submit', function(event){
 
     createFish(new ObjFish(form.fishName.value, form.inpLink.value, form.urlFish.value, style));
 
-    resetForm()
+    resetForm();
+    minus.hidden = false;
 })
 
 function resetForm(){
